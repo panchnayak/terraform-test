@@ -57,7 +57,6 @@ pipeline {
             steps {
                 script {
                     withAWS(credentials: "AWS_CREDS", region: "us-east-1") {
-                        s3Download(file:'tfplan', bucket:'pnayak-demo-bucket', path:'jenkins-jobs/tfplan', force:true) 
                         s3Download(file:'terraform.tfstate', bucket:'pnayak-demo-bucket', path:'jenkins-jobs/terraform.tfstate', force:true) 
                     }
                 }
@@ -86,7 +85,7 @@ pipeline {
             steps {
                 script {
                     sh "echo Destroying"
-                    sh 'terraform destroy -auto-approve tfplan'
+                    sh 'terraform destroy -auto-approve'
                     
                 }
             }
@@ -98,7 +97,6 @@ pipeline {
                 script {
                     withAWS(credentials: "AWS_CREDS", region: "us-east-1") {
                         s3Upload(file:'terraform.tfstate', bucket:'pnayak-demo-bucket', path:'jenkins-jobs/')
-                        s3Upload(file:'tfplan', bucket:'pnayak-demo-bucket', path:'jenkins-jobs/')
                     }
                 }
             }
