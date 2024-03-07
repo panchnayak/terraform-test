@@ -66,7 +66,11 @@ pipeline {
             when { expression { params.ACTION_REQUESTING == 'Apply'  }  }
             steps {
                 script {
-                    sh 'terraform plan -out=tfplan'
+                    withCredentials([sshUserPrivateKey(credentialsId: 'cloudbees-demo',keyFileVariable: 'SSH_KEY')]) {
+                        sh "echo Plan"
+                        sh 'cp "$SSH_KEY" files/cloudbees-demo.pem'
+                        sh 'terraform plan -out=tfplan'
+                    }  
                 }
             }
         }
