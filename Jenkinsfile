@@ -78,7 +78,7 @@ pipeline {
                         sh "echo Applying"
                         sh 'cp "$SSH_KEY" files/cloudbees-demo.pem'
                         sh 'terraform apply -auto-approve tfplan'
-                    } 
+                    }  
                 }
             }
         }
