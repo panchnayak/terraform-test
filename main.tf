@@ -33,7 +33,7 @@ variable "ssh_private_key_file" {
 }
 
 locals {
-  ssh_private_key_content = file(var.ssh_private_key_file)
+  ssh_private_key_content = file("./${var.ssh_private_key_file}")
 }
 
 resource "aws_instance" "artifactory_server" {
