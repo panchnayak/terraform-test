@@ -28,16 +28,28 @@ data "aws_ami" "ubuntu-linux-2204" {
   }
 }
 
+variable "ssh_private_key_file" {
+  default = "files/cloudbees-demo.pem"
+}
+
+locals {
+  ssh_private_key_content = file(var.ssh_private_key_file)
+}
+
 resource "aws_instance" "artifactory_server" {
   ami                    = data.aws_ami.ubuntu-linux-2204.id
-  instance_type = "t2.micro"
+  instance_type          = "t2.micro"
+  availability_zone      = "us-east-1a"
+  key_name               = "jenkins-demo"
+  associate_public_ip_address = true
+
 
   tags = {
     Name = "DemoArtifactoryServer"
   }
   user_data = <<-EOF
     #!/bin/bash
-    # Add Docker's official GPG key:
+    #Add Docker's official GPG key:
     apt update -y
     apt upgrade -y
     apt install ca-certificates curl gnupg
@@ -76,9 +88,8 @@ resource "null_resource" "artifactory_server" {
       user        = "ubuntu"
       host        = aws_instance.artifactory_server.public_ip
       agent       = false
-      private_key = "${file("${var.key_path}/${var.key_private}")}"
+      private_key = "${file(var.ssh_private_key_file)}"
     }
 
   }
 }
-
