@@ -74,9 +74,11 @@ pipeline {
             when { expression { params.ACTION_REQUESTING == 'Apply'  }  }
             steps {
                 script {
-                    
-                    sh "echo Applying"
-                    sh 'terraform apply -auto-approve tfplan'
+                    withCredentials([sshUserPrivateKey(credentialsId: 'cloudbees-demo',keyFileVariable: 'SSH_KEY')]) {
+                        sh "echo Applying"
+                        sh 'cp "$SSH_KEY" files/cloudbees-demo.pem'
+                        sh 'terraform apply -auto-approve tfplan'
+                    } 
                 }
             }
         }
