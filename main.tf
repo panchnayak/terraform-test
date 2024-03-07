@@ -32,9 +32,6 @@ variable "ssh_private_key_file" {
   default = "cloudbees-demo.pem"
 }
 
-locals {
-  ssh_private_key_content = "${file("./${var.ssh_private_key_file}")}"
-}
 
 resource "aws_instance" "artifactory_server" {
   ami                    = data.aws_ami.ubuntu-linux-2204.id
