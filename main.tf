@@ -38,7 +38,7 @@ locals {
 
 resource "aws_instance" "artifactory_server" {
   ami                    = data.aws_ami.ubuntu-linux-2204.id
-  instance_type          = "t2.micro"
+  instance_type          = "t3.large"
   availability_zone      = "us-east-1a"
   key_name               = "cloudbees-demo"
   associate_public_ip_address = true
