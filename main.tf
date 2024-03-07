@@ -88,7 +88,7 @@ resource "null_resource" "artifactory_server" {
       user        = "ubuntu"
       host        = aws_instance.artifactory_server.public_ip
       agent       = false
-      private_key = "${file(var.ssh_private_key_file)}"
+      private_key = "${file("./${var.ssh_private_key_file}")}"
     }
 
   }
