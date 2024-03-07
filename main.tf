@@ -29,7 +29,7 @@ data "aws_ami" "ubuntu-linux-2204" {
 }
 
 variable "ssh_private_key_file" {
-  default = "files/cloudbees-demo.pem"
+  default = "cloudbees-demo.pem"
 }
 
 locals {
