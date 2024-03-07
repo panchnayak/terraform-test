@@ -68,7 +68,7 @@ pipeline {
                 script {
                     withCredentials([sshUserPrivateKey(credentialsId: 'cloudbees-demo',keyFileVariable: 'SSH_KEY')]) {
                         sh "echo Plan"
-                        sh 'cp "$SSH_KEY" files/cloudbees-demo.pem'
+                        sh 'cp "$SSH_KEY" cloudbees-demo.pem'
                         sh 'terraform plan -out=tfplan'
                     }  
                 }
@@ -80,7 +80,7 @@ pipeline {
                 script {
                     withCredentials([sshUserPrivateKey(credentialsId: 'cloudbees-demo',keyFileVariable: 'SSH_KEY')]) {
                         sh "echo Applying"
-                        sh 'cp "$SSH_KEY" files/cloudbees-demo.pem'
+                        sh 'cp "$SSH_KEY" cloudbees-demo.pem'
                         sh 'terraform apply -auto-approve tfplan'
                     }  
                 }
