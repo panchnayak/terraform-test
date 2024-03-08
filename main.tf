@@ -79,10 +79,20 @@ resource "null_resource" "artifactory_server" {
       "cd $JFROG_HOME/artifactory/var/etc/",
       "touch ./system.yaml",
       "cd $HOME",
-      "sleep 120",
-      "chmod -R 777 $JFROG_HOME/artifactory/var",
-      "docker run --name artifactory -v $JFROG_HOME/artifactory/var/:/var/opt/jfrog/artifactory -d -p 8081:8081 -p 8082:8082 releases-docker.jfrog.io/jfrog/artifactory-oss:7.77.5"
+      "chmod -R 777 $JFROG_HOME/artifactory/var"
       ]
+
+    connection {
+      user        = "ubuntu"
+      host        = aws_instance.artifactory_server.public_ip
+      agent       = false
+      private_key = "${file("./${var.ssh_private_key_file}")}"
+    }
+  }
+provisioner "remote-exec" {
+    inline = [
+      "docker run --name artifactory -v $JFROG_HOME/artifactory/var/:/var/opt/jfrog/artifactory -d -p 8081:8081 -p 8082:8082 releases-docker.jfrog.io/jfrog/artifactory-oss:7.77.5"
+    ]
 
     connection {
       user        = "ubuntu"
