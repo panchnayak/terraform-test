@@ -78,7 +78,7 @@ resource "null_resource" "artifactory_server" {
       "mkdir -p $JFROG_HOME/artifactory/var/etc/",
       "cd $JFROG_HOME/artifactory/var/etc/",
       "touch ./system.yaml",
-      "chown -R 1030:1030 $JFROG_HOME/artifactory/var"
+      "sudo chown -R 1030:1030 $JFROG_HOME/artifactory/var"
       ]
 
     connection {
