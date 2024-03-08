@@ -66,6 +66,8 @@ resource "aws_instance" "artifactory_server" {
     usermod -aG docker ubuntu
     apt install certbot
     touch /tmp/docker-installed.txt
+    sleep 20
+    echo "docker installed"
     EOF
 }
 
