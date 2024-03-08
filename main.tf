@@ -60,7 +60,7 @@ resource "aws_instance" "artifactory_server" {
       "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
       tee /etc/apt/sources.list.d/docker.list > /dev/null
     apt update -y
-    apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin apache2 -y
+    apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
     systemctl start docker 
     systemctl enable docker 
     usermod -aG docker ubuntu
@@ -77,22 +77,11 @@ resource "null_resource" "artifactory_server" {
       "export JFROG_HOME=~/.jfrog",
       "mkdir -p $JFROG_HOME/artifactory/var/etc/",
       "cd $JFROG_HOME/artifactory/var/etc/",
-      "touch ./system.yaml"
-      ]
-
-    connection {
-      user        = "ubuntu"
-      host        = aws_instance.artifactory_server.public_ip
-      agent       = false
-      private_key = "${file("./${var.ssh_private_key_file}")}"
-    }
-  }
-  provisioner "remote-exec" {
-    inline = [
-      "export JFROG_HOME=~/.jfrog",
+      "touch ./system.yaml",
       "sudo chown -R 1030:1030 $JFROG_HOME/artifactory/var",
       "sudo chmod -R 777 $JFROG_HOME/artifactory/var"
       ]
+
     connection {
       user        = "ubuntu"
       host        = aws_instance.artifactory_server.public_ip
