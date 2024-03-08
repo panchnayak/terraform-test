@@ -102,6 +102,7 @@ resource "null_resource" "artifactory_server" {
   }
 provisioner "remote-exec" {
     inline = [
+      "export JFROG_HOME=~/.jfrog",
       "docker run --name artifactory -v $JFROG_HOME/artifactory/var/:/var/opt/jfrog/artifactory -d -p 8081:8081 -p 8082:8082 releases-docker.jfrog.io/jfrog/artifactory-oss:7.77.5"
     ]
     connection {
