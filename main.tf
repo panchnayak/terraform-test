@@ -60,14 +60,13 @@ resource "aws_instance" "artifactory_server" {
       "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
       tee /etc/apt/sources.list.d/docker.list > /dev/null
     apt update -y
-    apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+    apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin apache2 -y
     systemctl start docker 
     systemctl enable docker 
     usermod -aG docker ubuntu
     apt install certbot -y
     touch /tmp/docker-installed.txt
     echo "docker installed"
-apt install apache2 -y
     EOF
 }
 
