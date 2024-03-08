@@ -66,7 +66,6 @@ resource "aws_instance" "artifactory_server" {
     usermod -aG docker ubuntu
     apt install certbot
     touch /tmp/docker-installed.txt
-    sleep 20
     echo "docker installed"
     EOF
 }
@@ -80,6 +79,7 @@ resource "null_resource" "artifactory_server" {
       "cd $JFROG_HOME/artifactory/var/etc/",
       "touch ./system.yaml",
       "cd $HOME",
+      "sleep 60",
       "sudo chown -R 1030:1030 $JFROG_HOME/artifactory/var",
       "chmod -R 777 $JFROG_HOME/artifactory/var",
       "docker run --name artifactory -v $JFROG_HOME/artifactory/var/:/var/opt/jfrog/artifactory -d -p 8081:8081 -p 8082:8082 releases-docker.jfrog.io/jfrog/artifactory-oss:7.77.5"
