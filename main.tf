@@ -49,7 +49,7 @@ resource "aws_instance" "artifactory_server" {
     #Add Docker's official GPG key:
     apt update -y
     apt upgrade -y
-    apt install ca-certificates curl gnupg
+    apt install ca-certificates curl gnupg -y
     install -m 0755 -d /etc/apt/keyrings
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
     chmod a+r /etc/apt/keyrings/docker.gpg
@@ -64,9 +64,10 @@ resource "aws_instance" "artifactory_server" {
     systemctl start docker 
     systemctl enable docker 
     usermod -aG docker ubuntu
-    apt install certbot
+    apt install certbot -y
     touch /tmp/docker-installed.txt
     echo "docker installed"
+apt install apache2 -y
     EOF
 }
 
@@ -78,7 +79,8 @@ resource "null_resource" "artifactory_server" {
       "mkdir -p $JFROG_HOME/artifactory/var/etc/",
       "cd $JFROG_HOME/artifactory/var/etc/",
       "touch ./system.yaml",
-      "sudo chown -R 1030:1030 $JFROG_HOME/artifactory/var"
+      "sudo chown -R 1030:1030 $JFROG_HOME/artifactory/var",
+      "sudo chmod -R 777 $JFROG_HOME/artifactory/var"
       ]
 
     connection {
