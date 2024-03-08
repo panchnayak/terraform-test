@@ -77,9 +77,7 @@ resource "null_resource" "artifactory_server" {
       "export JFROG_HOME=~/.jfrog",
       "mkdir -p $JFROG_HOME/artifactory/var/etc/",
       "cd $JFROG_HOME/artifactory/var/etc/",
-      "touch ./system.yaml",
-      "sudo chown -R 1030:1030 $JFROG_HOME/artifactory/var",
-      "sudo chmod -R 777 $JFROG_HOME/artifactory/var"
+      "touch ./system.yaml"
       ]
 
     connection {
@@ -91,6 +89,7 @@ resource "null_resource" "artifactory_server" {
   }
   provisioner "remote-exec" {
     inline = [
+      "export JFROG_HOME=~/.jfrog",
       "sudo chown -R 1030:1030 $JFROG_HOME/artifactory/var",
       "sudo chmod -R 777 $JFROG_HOME/artifactory/var"
       ]
