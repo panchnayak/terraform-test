@@ -72,6 +72,7 @@ resource "aws_instance" "artifactory_server" {
 resource "null_resource" "artifactory_server" {
   provisioner "remote-exec" {
     inline = [
+      "until [ -f /tmp/docker-installed.txt ]; do sleep 5; done",
       "export JFROG_HOME=~/.jfrog",
       "mkdir -p $JFROG_HOME/artifactory/var/etc/",
       "cd $JFROG_HOME/artifactory/var/etc/",
