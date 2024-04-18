@@ -19,7 +19,7 @@ pipeline {
         stage('Checkout Code') {
             steps {
 				script {
-					git branch: 'main', url: 'https://github.com/panchnayak/terraform-ad.git'
+					git branch: 'main', url: 'https://github.com/panchnayak/terraform-test.git'
 					bat 'dir'
 				}
             }
