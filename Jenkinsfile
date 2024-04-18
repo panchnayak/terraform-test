@@ -48,10 +48,10 @@ pipeline {
                         bat "echo Applying"
                         bat 'terraform apply -auto-approve tfplan'
                         
-                        bat echo "Upload State to S3"
+                        bat "echo Upload State to S3"
                         withAWS(region: "us-east-1") {
                             s3Upload(file:'terraform.tfstate', bucket:'pnayak-demo-bucket', path:'jenkins-jobs/')
-                            bat echo "terraform state uploaded"
+                            bat 'echo terraform state uploaded"
                         }
                         bat "echo Terraform Applied"
                 }
