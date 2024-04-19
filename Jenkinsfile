@@ -48,9 +48,8 @@ pipeline {
                 stage('Deploy to EAST Region') {
                     when { expression { params.Select_The_Region == 'AWS_US_EAST_2'  }  }
                     steps {
-                        
                         script {
-                                bat "echo Applying on ${AWS_REGION}"
+                                bat "echo Applying on AWS_US_EAST_2"
                                 bat 'terraform apply -var aws_region=us-east-2 -auto-approve'
                                 bat "echo Upload State to S3"
                                 withAWS(region: "us-east-2") {
@@ -61,62 +60,27 @@ pipeline {
                         }
                     }
                 }
-                stage('Terraform Apply') {
-                when { expression { params.Select_The_Region == 'AWS_US_WEST_2'  }  }
-                    steps {
-                        script {
-                                bat "echo Applying on ${AWS_REGION}"
-                                bat 'terraform apply -var aws_region=us-west-2 -auto-approve'
-                                bat "echo Upload State to S3"
-                                withAWS(region: "us-west-2") {
-                                    s3Upload(file:'terraform.tfstate', bucket:'pnayak-demo-bucket', path:'jenkins-jobs/')
-                                    bat 'echo terraform state uploaded"
-                                }
-                                bat "echo Terraform Applied to us-west-2 region"
-                        }
-                    }
-                }
-            }
-        stage('Terraform Destroy') {
-            when { expression { params.Terraform_Action == 'Destroy'  }  }
-            stage('Terraform Apply') {
-            when { expression { params.Terraform_Action == 'Deploy'  }  }
-            parallel {
-                stage('Deploy to EAST Region') {
-                    when { expression { params.Select_The_Region == 'AWS_US_EAST_2'  }  }
-                    steps {
-                        script {
-                                bat "echo Destroying"
-                                bat "echo Get the Statefile from S3"
-                                withAWS(region: "us-east-1") {
-                                    s3Download(file:'terraform.tfstate', bucket:'pnayak-demo-bucket', path:'jenkins-jobs/terraform.tfstate', force:true) 
-                                }
-                                bat 'dir'
-                                bat "terraform destroy -var aws_region=us-east-2 -auto-approve"
-                        }
-                    }
-                }
-                stage('Terraform Apply') {
-                when { expression { params.Select_The_Region == 'AWS_US_WEST_2'  }  }
-                    steps {
-                        script {
-                                bat "echo Destroying"
-                                bat "echo Get the Statefile from S3"
-                                withAWS(region: "us-west-1") {
-                                    s3Download(file:'terraform.tfstate', bucket:'pnayak-demo-bucket', path:'jenkins-jobs/terraform.tfstate', force:true) 
-                                }
-                                bat 'dir'
-                                bat "terraform destroy -var aws_region=us-west-2 -auto-approve"
+                
+                stage('Deploy to WEST Region') {
+                    when { expression { params.Select_The_Region == 'AWS_US_WEST_2'  }  }
+                        steps {
+                            script {
+                                    bat "echo Applying on AWS_US_WEST_2"
+                                    bat 'terraform apply -var aws_region=us-west-2 -auto-approve'
+                                    bat "echo Upload State to S3"
+
+                                    withAWS(region: "us-west-2") {
+                                        s3Upload(file:'terraform.tfstate', bucket:'pnayak-demo-bucket', path:'jenkins-jobs/')
+                                        bat 'echo terraform state uploaded"
+                                    }
+                                    bat "echo Terraform Applied to us-west-2 region"
+                            }
                         }
                     }
                 }
             }
         }
     }
-                        
-    post {
-        always {
-            cleanWs()
-        }
-    }
-}
+                                
+                    
+            
