@@ -85,15 +85,14 @@ pipeline {
                 stage('Deploy to EAST Region') {
                     when { expression { params.Select_The_Region == 'AWS_US_EAST_2'  }  }
                     steps {
-                        
                         script {
                                 bat "echo Destroying"
-                        bat "echo Get the Statefile from S3"
-                        withAWS(region: "us-east-1") {
-                            s3Download(file:'terraform.tfstate', bucket:'pnayak-demo-bucket', path:'jenkins-jobs/terraform.tfstate', force:true) 
-                        }
-                        bat 'dir'
-                        bat "terraform destroy -var aws_region=us-east-2 -auto-approve"
+                                bat "echo Get the Statefile from S3"
+                                withAWS(region: "us-east-1") {
+                                    s3Download(file:'terraform.tfstate', bucket:'pnayak-demo-bucket', path:'jenkins-jobs/terraform.tfstate', force:true) 
+                                }
+                                bat 'dir'
+                                bat "terraform destroy -var aws_region=us-east-2 -auto-approve"
                         }
                     }
                 }
@@ -102,12 +101,12 @@ pipeline {
                     steps {
                         script {
                                 bat "echo Destroying"
-                        bat "echo Get the Statefile from S3"
-                        withAWS(region: "us-west-1") {
-                            s3Download(file:'terraform.tfstate', bucket:'pnayak-demo-bucket', path:'jenkins-jobs/terraform.tfstate', force:true) 
-                        }
-                        bat 'dir'
-                        bat "terraform destroy -var aws_region=us-west-2 -auto-approve"
+                                bat "echo Get the Statefile from S3"
+                                withAWS(region: "us-west-1") {
+                                    s3Download(file:'terraform.tfstate', bucket:'pnayak-demo-bucket', path:'jenkins-jobs/terraform.tfstate', force:true) 
+                                }
+                                bat 'dir'
+                                bat "terraform destroy -var aws_region=us-west-2 -auto-approve"
                         }
                     }
                 }
