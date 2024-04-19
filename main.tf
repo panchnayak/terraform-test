@@ -10,7 +10,7 @@ terraform {
 }
 
 provider "aws" {
-  region  = "us-east-1"
+  region  = var.aws_region
 }
 
 data "aws_ami" "ubuntu-linux-2204" {
